@@ -1,5 +1,5 @@
 FROM adfreiburg/qlever
-WORKDIR /usr/local/qlever
+WORKDIR /app
 
 COPY Qleverfile .
 COPY query.rq .
