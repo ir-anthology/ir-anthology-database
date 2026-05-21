@@ -4,14 +4,21 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 CONSTRUCT {
   ?pub dblp:title ?title ;
        dblp:yearOfPublication ?year ;
-       dblp:createdBy ?author ;
+       dblp:authoredBy ?author ;
+       dblp:editedBy ?editor ;
        dblp:publishedInStream ?stream ;
+       dblp:publishedBy ?publisher ;
+       dblp:publishedInJournalVolume ?volume;
+       dblp:publishedInJournalVolumeIssue ?issue;
+       dblp:pagination ?page;
+       dblp:monthOfPublication ?month;
        rdf:type ?pubclass .
 
   ?author dblp:primaryCreatorName ?name ;
           rdf:type dblp:Creator .
 
   ?stream dblp:streamTitle ?streamTitle ;
+          dblp:yearOfEvent ?yearEvent;
           rdf:type ?streamclass .
 }
 WHERE {
@@ -57,16 +64,25 @@ WHERE {
 
   ?pub dblp:publishedInStream ?stream ;
        dblp:title ?title ;
+       dblp:yearOfPublication ?year ;
        dblp:createdBy ?author .
 
-  OPTIONAL { ?pub dblp:yearOfPublication ?year . }
+  OPTIONAL { ?pub dblp:publishedBy ?publisher . }
+  OPTIONAL { ?pub dblp:publishedInJournalVolume ?volume . }
+  OPTIONAL { ?pub dblp:publishedInJournalVolumeIssue ?issue. }
+  OPTIONAL { ?pub dblp:pagination ?page . }
+  OPTIONAL { ?pub dblp:monthOfPublication ?month . }
+  OPTIONAL { ?pub dblp:editedBy ?editor . }
+  
+  ?stream dblp:streamTitle ?streamTitle .
+  OPTIONAL { ?stream dblp:yearOfEvent ?yearEvent . }
+
+  OPTIONAL { ?author dblp:primaryCreatorName ?name . }
+
   OPTIONAL { ?pub rdf:type ?pubclass . 
     FILTER(?pubclass != dblp:Publication)
   }
 
-  OPTIONAL { ?author dblp:primaryCreatorName ?name . }
-
-  OPTIONAL { ?stream dblp:streamTitle ?streamTitle . }
   OPTIONAL {
       ?stream rdf:type ?streamclass .
       FILTER(?streamclass != dblp:Stream)
