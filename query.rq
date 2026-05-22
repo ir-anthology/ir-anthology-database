@@ -4,6 +4,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 CONSTRUCT {
   ?pub dblp:title ?title ;
        dblp:yearOfPublication ?year ;
+       dblp:yearOfEvent ?yearEvent;
        dblp:authoredBy ?author ;
        dblp:editedBy ?editor ;
        dblp:publishedInStream ?stream ;
@@ -18,7 +19,6 @@ CONSTRUCT {
           rdf:type dblp:Creator .
 
   ?stream dblp:streamTitle ?streamTitle ;
-          dblp:yearOfEvent ?yearEvent;
           rdf:type ?streamclass .
 }
 WHERE {
@@ -73,9 +73,9 @@ WHERE {
   OPTIONAL { ?pub dblp:pagination ?page . }
   OPTIONAL { ?pub dblp:monthOfPublication ?month . }
   OPTIONAL { ?pub dblp:editedBy ?editor . }
+  OPTIONAL { ?pub dblp:yearOfEvent ?yearEvent . }
   
   ?stream dblp:streamTitle ?streamTitle .
-  OPTIONAL { ?stream dblp:yearOfEvent ?yearEvent . }
 
   OPTIONAL { ?author dblp:primaryCreatorName ?name . }
 
