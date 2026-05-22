@@ -9,14 +9,21 @@ CONSTRUCT {
        dblp:editedBy ?editor ;
        dblp:publishedInStream ?stream ;
        dblp:publishedBy ?publisher ;
-       dblp:publishedInJournalVolume ?volume;
-       dblp:publishedInJournalVolumeIssue ?issue;
-       dblp:pagination ?page;
-       dblp:monthOfPublication ?month;
+       dblp:publishedInJournalVolume ?volume ;
+       dblp:publishedInSeriesVolume ?seriesVolume ;
+       dblp:publishedInJournalVolumeIssue ?issue ;
+       dblp:pagination ?page ;
+       dblp:monthOfPublication ?month ;
        dblp:bibtexType ?bibtexType ;
+       dblp:publishedInSeries ?series ;
+       dblp:doi ?doi ;
+       dblp:isbn ?isbn ;
        rdf:type ?pubclass .
 
   ?author dblp:primaryCreatorName ?name ;
+          rdf:type dblp:Creator .
+
+  ?editor dblp:primaryCreatorName ?editorName ;
           rdf:type dblp:Creator .
 
   ?stream dblp:streamTitle ?streamTitle ;
@@ -66,9 +73,9 @@ WHERE {
   ?pub dblp:publishedInStream ?stream ;
        dblp:title ?title ;
        dblp:yearOfPublication ?year ;
-       dblp:bibtexType ?bibtexType ;
-       dblp:createdBy ?author .
+       dblp:bibtexType ?bibtexType .
 
+  OPTIONAL { ?pub dblp:authoredBy ?author . }
   OPTIONAL { ?pub dblp:publishedBy ?publisher . }
   OPTIONAL { ?pub dblp:publishedInJournalVolume ?volume . }
   OPTIONAL { ?pub dblp:publishedInJournalVolumeIssue ?issue. }
@@ -76,10 +83,15 @@ WHERE {
   OPTIONAL { ?pub dblp:monthOfPublication ?month . }
   OPTIONAL { ?pub dblp:editedBy ?editor . }
   OPTIONAL { ?pub dblp:yearOfEvent ?yearEvent . }
+  OPTIONAL { ?pub dblp:publishedInSeriesVolume ?seriesVolume . }
+  OPTIONAL { ?pub dblp:publishedInSeries ?series . }
+  OPTIONAL { ?pub dblp:doi ?doi . }
+  OPTIONAL { ?pub dblp:isbn ?isbn . }
   
   ?stream dblp:streamTitle ?streamTitle .
 
   OPTIONAL { ?author dblp:primaryCreatorName ?name . }
+  OPTIONAL { ?editor dblp:primaryCreatorName ?editorName . }
 
   OPTIONAL { ?pub rdf:type ?pubclass . 
     FILTER(?pubclass != dblp:Publication)
