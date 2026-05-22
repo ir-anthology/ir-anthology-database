@@ -13,6 +13,7 @@ CONSTRUCT {
        dblp:publishedInJournalVolumeIssue ?issue;
        dblp:pagination ?page;
        dblp:monthOfPublication ?month;
+       dblp:bibtexType ?bibtexType ;
        rdf:type ?pubclass .
 
   ?author dblp:primaryCreatorName ?name ;
@@ -65,6 +66,7 @@ WHERE {
   ?pub dblp:publishedInStream ?stream ;
        dblp:title ?title ;
        dblp:yearOfPublication ?year ;
+       dblp:bibtexType ?bibtexType ;
        dblp:createdBy ?author .
 
   OPTIONAL { ?pub dblp:publishedBy ?publisher . }
