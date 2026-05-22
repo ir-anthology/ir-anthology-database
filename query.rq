@@ -4,7 +4,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 CONSTRUCT {
   ?pub dblp:title ?title ;
        dblp:yearOfPublication ?year ;
-       dblp:yearOfEvent ?yearEvent;
+       dblp:yearOfEvent ?yearEvent ;
        dblp:authoredBy ?author ;
        dblp:editedBy ?editor ;
        dblp:publishedInStream ?stream ;
@@ -19,13 +19,10 @@ CONSTRUCT {
        dblp:doi ?doi ;
        dblp:isbn ?isbn ;
        rdf:type ?pubclass .
-
   ?author dblp:primaryCreatorName ?name ;
           rdf:type dblp:Creator .
-
   ?editor dblp:primaryCreatorName ?editorName ;
           rdf:type dblp:Creator .
-
   ?stream dblp:streamTitle ?streamTitle ;
           rdf:type ?streamclass .
 }
@@ -70,36 +67,47 @@ WHERE {
     <https://dblp.org/streams/conf/www>
   }
 
-  ?pub dblp:publishedInStream ?stream ;
-       dblp:title ?title ;
-       dblp:yearOfPublication ?year ;
-       dblp:bibtexType ?bibtexType .
 
-  OPTIONAL { ?pub dblp:authoredBy ?author . }
-  OPTIONAL { ?pub dblp:publishedBy ?publisher . }
-  OPTIONAL { ?pub dblp:publishedInJournalVolume ?volume . }
-  OPTIONAL { ?pub dblp:publishedInJournalVolumeIssue ?issue. }
-  OPTIONAL { ?pub dblp:pagination ?page . }
-  OPTIONAL { ?pub dblp:monthOfPublication ?month . }
-  OPTIONAL { ?pub dblp:editedBy ?editor . }
-  OPTIONAL { ?pub dblp:yearOfEvent ?yearEvent . }
-  OPTIONAL { ?pub dblp:publishedInSeriesVolume ?seriesVolume . }
-  OPTIONAL { ?pub dblp:publishedInSeries ?series . }
-  OPTIONAL { ?pub dblp:doi ?doi . }
-  OPTIONAL { ?pub dblp:isbn ?isbn . }
-  
   ?stream dblp:streamTitle ?streamTitle .
+  OPTIONAL {
+    ?stream rdf:type ?streamclass .
+    FILTER(?streamclass != dblp:Stream)
+  }
 
-  OPTIONAL { ?author dblp:primaryCreatorName ?name . }
-  OPTIONAL { ?editor dblp:primaryCreatorName ?editorName . }
+  {
+    SELECT DISTINCT ?pub ?stream ?title ?year ?bibtexType
+                    ?publisher ?volume ?issue ?page ?month
+                    ?yearEvent ?seriesVolume ?series ?doi ?isbn
+    WHERE {
+      ?pub dblp:publishedInStream ?stream ;
+           dblp:title ?title ;
+           dblp:yearOfPublication ?year ;
+           dblp:bibtexType ?bibtexType .
+      OPTIONAL { ?pub dblp:publishedBy ?publisher }
+      OPTIONAL { ?pub dblp:publishedInJournalVolume ?volume }
+      OPTIONAL { ?pub dblp:publishedInJournalVolumeIssue ?issue }
+      OPTIONAL { ?pub dblp:pagination ?page }
+      OPTIONAL { ?pub dblp:monthOfPublication ?month }
+      OPTIONAL { ?pub dblp:yearOfEvent ?yearEvent }
+      OPTIONAL { ?pub dblp:publishedInSeriesVolume ?seriesVolume }
+      OPTIONAL { ?pub dblp:publishedInSeries ?series }
+      OPTIONAL { ?pub dblp:doi ?doi }
+      OPTIONAL { ?pub dblp:isbn ?isbn }
+    }
+  }
 
-  OPTIONAL { ?pub rdf:type ?pubclass . 
+  OPTIONAL {
+    ?pub rdf:type ?pubclass .
     FILTER(?pubclass != dblp:Publication)
   }
 
   OPTIONAL {
-      ?stream rdf:type ?streamclass .
-      FILTER(?streamclass != dblp:Stream)
+    ?pub dblp:authoredBy ?author .
+    OPTIONAL { ?author dblp:primaryCreatorName ?name }
+  }
+  OPTIONAL {
+    ?pub dblp:editedBy ?editor .
+    OPTIONAL { ?editor dblp:primaryCreatorName ?editorName }
   }
 }
 LIMIT __LIMIT__
