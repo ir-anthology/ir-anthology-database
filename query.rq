@@ -20,6 +20,7 @@ CONSTRUCT {
        dblp:isbn ?isbn ;
        dblp:primaryDocumentPage ?url;
        dblp:listedOnTocPage ?dblpUrl;
+       dblp:publishedAsPartOf ?booktitle ;
        rdf:type ?pubclass .
   ?author dblp:primaryCreatorName ?name ;
           rdf:type dblp:Creator .
@@ -79,7 +80,8 @@ WHERE {
   {
     SELECT DISTINCT ?pub ?stream ?title ?year ?bibtexType
                     ?publisher ?volume ?issue ?page ?month
-                    ?yearEvent ?seriesVolume ?series ?doi ?isbn ?url ?dblpUrl
+                    ?yearEvent ?seriesVolume ?series ?doi ?isbn 
+                    ?url ?dblpUrl ?booktitle
     WHERE {
       ?pub dblp:publishedInStream ?stream ;
            dblp:title ?title ;
@@ -97,6 +99,7 @@ WHERE {
       OPTIONAL { ?pub dblp:isbn ?isbn }
       OPTIONAL { ?pub dblp:primaryDocumentPage ?url }
       OPTIONAL { ?pub dblp:listedOnTocPage ?dblpUrl }
+      OPTIONAL { ?pub dblp:publishedAsPartOf ?booktitle }
     }
   }
 
