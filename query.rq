@@ -18,6 +18,8 @@ CONSTRUCT {
        dblp:publishedInSeries ?series ;
        dblp:doi ?doi ;
        dblp:isbn ?isbn ;
+       dblp:primaryDocumentPage ?url;
+       dblp:listedOnTocPage ?dblpUrl;
        rdf:type ?pubclass .
   ?author dblp:primaryCreatorName ?name ;
           rdf:type dblp:Creator .
@@ -77,7 +79,7 @@ WHERE {
   {
     SELECT DISTINCT ?pub ?stream ?title ?year ?bibtexType
                     ?publisher ?volume ?issue ?page ?month
-                    ?yearEvent ?seriesVolume ?series ?doi ?isbn
+                    ?yearEvent ?seriesVolume ?series ?doi ?isbn ?url ?dblpUrl
     WHERE {
       ?pub dblp:publishedInStream ?stream ;
            dblp:title ?title ;
@@ -93,6 +95,8 @@ WHERE {
       OPTIONAL { ?pub dblp:publishedInSeries ?series }
       OPTIONAL { ?pub dblp:doi ?doi }
       OPTIONAL { ?pub dblp:isbn ?isbn }
+      OPTIONAL { ?pub dblp:primaryDocumentPage ?url }
+      OPTIONAL { ?pub dblp:listedOnTocPage ?dblpUrl }
     }
   }
 
